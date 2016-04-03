@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MetadataTestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Foo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastUpdate" Type="datetime" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="OtherFlag" Type="bit" Nullable="false" />
+          <Property Name="FKFirstNotNull" Type="int" Nullable="false" />
+          <Property Name="FKSecondNull" Type="int" />
+          <Property Name="FKThirdDefaultValue" Type="int" />
+          <Property Name="Labels" Type="varchar" MaxLength="300" />
+        </EntityType>
+        <Function Name="Foo_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Foo_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LastUpdate" Type="datetime" Mode="In" />
+          <Parameter Name="Active" Type="bit" Mode="In" />
+          <Parameter Name="OtherFlag" Type="bit" Mode="In" />
+          <Parameter Name="FKFirstNotNull" Type="int" Mode="In" />
+          <Parameter Name="FKSecondNull" Type="int" Mode="In" />
+          <Parameter Name="FKThirdDefaultValue" Type="int" Mode="In" />
+          <Parameter Name="Labels" Type="varchar" Mode="In" />
+          <Parameter Name="Id" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="Foo_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PageIndex" Type="int" Mode="In" />
+          <Parameter Name="PageQty" Type="int" Mode="In" />
+          <Parameter Name="OrderBy" Type="varchar" Mode="In" />
+          <Parameter Name="SortDirection" Type="varchar" Mode="In" />
+          <Parameter Name="TotalCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="Foo_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="LastUpdate" Type="datetime" Mode="In" />
+          <Parameter Name="Active" Type="bit" Mode="In" />
+          <Parameter Name="OtherFlag" Type="bit" Mode="In" />
+          <Parameter Name="FKFirstNotNull" Type="int" Mode="In" />
+          <Parameter Name="FKSecondNull" Type="int" Mode="In" />
+          <Parameter Name="FKThirdDefaultValue" Type="int" Mode="In" />
+          <Parameter Name="Labels" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="MetadataTestModelStoreContainer">
+          <EntitySet Name="Foo" EntityType="Self.Foo" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MetadataTestModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Foo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="OtherFlag" Type="Boolean" Nullable="false" />
+          <Property Name="FKFirstNotNull" Type="Int32" Nullable="false" />
+          <Property Name="FKSecondNull" Type="Int32" />
+          <Property Name="FKThirdDefaultValue" Type="Int32" />
+          <Property Name="Labels" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="MetadataTestEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Foos" EntityType="Self.Foo" />
+          <FunctionImport Name="Foo_Insert">
+            <Parameter Name="LastUpdate" Mode="In" Type="DateTime" />
+            <Parameter Name="Active" Mode="In" Type="Boolean" />
+            <Parameter Name="OtherFlag" Mode="In" Type="Boolean" />
+            <Parameter Name="FKFirstNotNull" Mode="In" Type="Int32" />
+            <Parameter Name="FKSecondNull" Mode="In" Type="Int32" />
+            <Parameter Name="FKThirdDefaultValue" Mode="In" Type="Int32" />
+            <Parameter Name="Labels" Mode="In" Type="String" />
+            <Parameter Name="Id" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Foo_List" ReturnType="Collection(MetadataTestModel.Foo_List_Result)">
+            <Parameter Name="PageIndex" Mode="In" Type="Int32" />
+            <Parameter Name="PageQty" Mode="In" Type="Int32" />
+            <Parameter Name="OrderBy" Mode="In" Type="String" />
+            <Parameter Name="SortDirection" Mode="In" Type="String" />
+            <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Foo_Delete">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Foo_Update">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="LastUpdate" Mode="In" Type="DateTime" />
+            <Parameter Name="Active" Mode="In" Type="Boolean" />
+            <Parameter Name="OtherFlag" Mode="In" Type="Boolean" />
+            <Parameter Name="FKFirstNotNull" Mode="In" Type="Int32" />
+            <Parameter Name="FKSecondNull" Mode="In" Type="Int32" />
+            <Parameter Name="FKThirdDefaultValue" Mode="In" Type="Int32" />
+            <Parameter Name="Labels" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="Foo_List_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="DateTime" Name="LastUpdate" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="Active" Nullable="false" />
+          <Property Type="Boolean" Name="OtherFlag" Nullable="false" />
+          <Property Type="Int32" Name="FKFirstNotNull" Nullable="false" />
+          <Property Type="Int32" Name="FKSecondNull" Nullable="true" />
+          <Property Type="Int32" Name="FKThirdDefaultValue" Nullable="true" />
+          <Property Type="String" Name="Labels" Nullable="true" MaxLength="300" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MetadataTestModelStoreContainer" CdmEntityContainer="MetadataTestEntities">
+          <EntitySetMapping Name="Foos">
+            <EntityTypeMapping TypeName="MetadataTestModel.Foo">
+              <MappingFragment StoreEntitySet="Foo">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="OtherFlag" ColumnName="OtherFlag" />
+                <ScalarProperty Name="FKFirstNotNull" ColumnName="FKFirstNotNull" />
+                <ScalarProperty Name="FKSecondNull" ColumnName="FKSecondNull" />
+                <ScalarProperty Name="FKThirdDefaultValue" ColumnName="FKThirdDefaultValue" />
+                <ScalarProperty Name="Labels" ColumnName="Labels" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Foo_Insert" FunctionName="MetadataTestModel.Store.Foo_Insert" />
+          <FunctionImportMapping FunctionImportName="Foo_List" FunctionName="MetadataTestModel.Store.Foo_List">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MetadataTestModel.Foo_List_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="OtherFlag" ColumnName="OtherFlag" />
+                <ScalarProperty Name="FKFirstNotNull" ColumnName="FKFirstNotNull" />
+                <ScalarProperty Name="FKSecondNull" ColumnName="FKSecondNull" />
+                <ScalarProperty Name="FKThirdDefaultValue" ColumnName="FKThirdDefaultValue" />
+                <ScalarProperty Name="Labels" ColumnName="Labels" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Foo_Delete" FunctionName="MetadataTestModel.Store.Foo_Delete" />
+          <FunctionImportMapping FunctionImportName="Foo_Update" FunctionName="MetadataTestModel.Store.Foo_Update" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

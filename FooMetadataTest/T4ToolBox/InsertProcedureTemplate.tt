@@ -1,0 +1,65 @@
+<#@ assembly name="Microsoft.SqlServer.ConnectionInfo" #>
+<#@ assembly name="Microsoft.SqlServer.Smo" #>
+<#@ import namespace="Microsoft.SqlServer.Management.Smo" #>
+<#+
+public class InsertProcedureTemplate : Template
+{
+    public string DatabaseName;
+    public string TableName;
+
+    public override string TransformText()
+    {
+        Server server = new Server();
+        Database database = new Database(server, DatabaseName);
+        Table table = new Table(database, TableName);
+        table.Refresh();
+#>
+create procedure <#= table.Name #>_Insert
+<#+
+        this.PushIndent("\t");
+        for (int i = 0; i < table.Columns.Count; i++)
+        {
+            Column column = table.Columns[i];
+            this.Write("@" + column.Name + " " + column.DataType.Name);
+            if (i < table.Columns.Count - 1)
+                this.Write(",");
+            this.WriteLine(string.Empty);
+        }
+        this.PopIndent();
+#>
+as
+    insert into <#= table.Name #>
+    (
+<#+
+        this.PushIndent("\t\t");
+        for (int i = 0; i < table.Columns.Count; i++)
+        {
+            Column column = table.Columns[i];
+            this.Write(column.Name);
+            if (i < table.Columns.Count - 1)
+                Write(",");
+            this.WriteLine(string.Empty);
+        }
+        this.PopIndent();
+#>
+    )
+    values
+    (
+<#+
+        this.PushIndent("\t\t");
+        for (int i = 0; i < table.Columns.Count; i++)
+        {
+            Column column = table.Columns[i];
+            this.Write("@" + column.Name);
+            if (i < table.Columns.Count - 1)
+                Write(",");
+            this.WriteLine(string.Empty);
+        }
+        this.PopIndent();
+#>
+    )
+<#+
+		return this.GenerationEnvironment.ToString();
+	}
+}
+#>

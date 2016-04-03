@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MetadataTestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Foo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LastUpdate" Type="datetime" Nullable="false" />
+    <Property Name="Active" Type="bit" Nullable="false" />
+    <Property Name="OtherFlag" Type="bit" Nullable="false" />
+    <Property Name="FKFirstNotNull" Type="int" Nullable="false" />
+    <Property Name="FKSecondNull" Type="int" />
+    <Property Name="FKThirdDefaultValue" Type="int" />
+    <Property Name="Labels" Type="varchar" MaxLength="300" />
+  </EntityType>
+  <Function Name="Foo_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Foo_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="LastUpdate" Type="datetime" Mode="In" />
+    <Parameter Name="Active" Type="bit" Mode="In" />
+    <Parameter Name="OtherFlag" Type="bit" Mode="In" />
+    <Parameter Name="FKFirstNotNull" Type="int" Mode="In" />
+    <Parameter Name="FKSecondNull" Type="int" Mode="In" />
+    <Parameter Name="FKThirdDefaultValue" Type="int" Mode="In" />
+    <Parameter Name="Labels" Type="varchar" Mode="In" />
+    <Parameter Name="Id" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="Foo_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PageIndex" Type="int" Mode="In" />
+    <Parameter Name="PageQty" Type="int" Mode="In" />
+    <Parameter Name="OrderBy" Type="varchar" Mode="In" />
+    <Parameter Name="SortDirection" Type="varchar" Mode="In" />
+    <Parameter Name="TotalCount" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="Foo_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Id" Type="int" Mode="In" />
+    <Parameter Name="LastUpdate" Type="datetime" Mode="In" />
+    <Parameter Name="Active" Type="bit" Mode="In" />
+    <Parameter Name="OtherFlag" Type="bit" Mode="In" />
+    <Parameter Name="FKFirstNotNull" Type="int" Mode="In" />
+    <Parameter Name="FKSecondNull" Type="int" Mode="In" />
+    <Parameter Name="FKThirdDefaultValue" Type="int" Mode="In" />
+    <Parameter Name="Labels" Type="varchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="MetadataTestModelStoreContainer">
+    <EntitySet Name="Foo" EntityType="Self.Foo" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

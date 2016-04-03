@@ -1,0 +1,14 @@
+C:\Users\joaol_000\Documents\Visual Studio 2015\Projects\FooMetadataTest\obj\Debug\FooMetadataTest.csprojResolveAssemblyReference.cache
+C:\Users\joaol_000\Documents\Visual Studio 2015\Projects\FooMetadataTest\bin\Debug\FooMetadataTest.dll
+C:\Users\joaol_000\Documents\Visual Studio 2015\Projects\FooMetadataTest\bin\Debug\FooMetadataTest.pdb
+C:\Users\joaol_000\Documents\Visual Studio 2015\Projects\FooMetadataTest\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\joaol_000\Documents\Visual Studio 2015\Projects\FooMetadataTest\obj\Debug\FooMetadataTest.dll
+C:\Users\joaol_000\Documents\Visual Studio 2015\Projects\FooMetadataTest\obj\Debug\FooMetadataTest.pdb
+C:\Users\joaol_000\Source\Repos\jTable Metadata\FooMetadataTest\bin\Debug\FooMetadataTest.dll
+C:\Users\joaol_000\Source\Repos\jTable Metadata\FooMetadataTest\bin\Debug\FooMetadataTest.pdb
+C:\Users\joaol_000\Source\Repos\jTable Metadata\FooMetadataTest\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\joaol_000\Source\Repos\jTable Metadata\FooMetadataTest\bin\Debug\Newtonsoft.Json.dll
+C:\Users\joaol_000\Source\Repos\jTable Metadata\FooMetadataTest\bin\Debug\Newtonsoft.Json.xml
+C:\Users\joaol_000\Source\Repos\jTable Metadata\FooMetadataTest\obj\Debug\FooMetadataTest.csprojResolveAssemblyReference.cache
+C:\Users\joaol_000\Source\Repos\jTable Metadata\FooMetadataTest\obj\Debug\FooMetadataTest.dll
+C:\Users\joaol_000\Source\Repos\jTable Metadata\FooMetadataTest\obj\Debug\FooMetadataTest.pdb

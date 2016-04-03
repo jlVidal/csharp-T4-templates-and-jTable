@@ -1,0 +1,147 @@
+<#@include file="CommonCrud.tt" #>
+CREATE PROCEDURE [<#= this.SchemaName #>].[<#= this.TableName #>_Insert]
+    <# WriteParameterDeclarations(this.Table); #> 
+AS
+BEGIN
+	SET NOCOUNT ON
+	INSERT INTO [<#= this.SchemaName #>].[<#= this.TableName #>] 
+	(
+		<# WriteInsertClause(this.Table); #>	
+    ) 
+    VALUES 
+    (
+		<# WriteValuesClause(this.Table); #> 
+    )
+    
+    <# WriteOutputParameters(this.Table); #>
+end
+<#+
+	/// <summary>
+	/// Writes stored procedure parameter declarations for all columns of the 
+	/// specified table. For IDENTITY and TIMESTAMP columns parameters are 
+	/// generated as OUTPUT in the end of parameter list.
+	/// </summary>
+	void WriteParameterDeclarations(Table table)
+	{
+		PushIndent("    ");
+
+		Column identityColumn = null;
+		Column timestampColumn = null;
+		int parameterIndex = 0;
+		for(int i = 0; i < table.Columns.Count; i++)
+		{
+			Column column = table.Columns[i];
+			if (column.Identity == true)
+			{
+				identityColumn = column;
+				continue;
+			}
+
+		    
+			if (column.DataType.SqlDataType == SqlDataType.Timestamp)
+			{
+				timestampColumn = column;
+				continue;
+			}
+
+			// Write input parameter for a regular column
+			if (parameterIndex > 0)
+				WriteLine(",");
+			
+			Write("@{0} {1} {2}", column.Name, GetDataTypeDeclaration(column.DataType), column.Nullable ? "= NULL" : "");
+			parameterIndex++;
+		}
+
+		// Write output parameter for identity column
+		if (identityColumn != null)
+		{
+			if (parameterIndex > 0)
+				WriteLine(",");
+			Write("@{0} {1} = NULL OUTPUT", identityColumn.Name, GetDataTypeDeclaration(identityColumn.DataType));
+			parameterIndex++;
+		}
+
+		// Write output parameter for timestamp column
+		if (timestampColumn != null)
+		{
+			if (parameterIndex > 0)
+				WriteLine(",");
+			Write("@{0} {1} = NULL OUTPUT", timestampColumn.Name, GetDataTypeDeclaration(timestampColumn.DataType));
+			parameterIndex++;				
+		}
+
+		PopIndent();
+	}
+
+	/// <summary>
+	/// Writes list of column names for the INSERT statement
+	/// </summary>
+	void WriteInsertClause(Table table)
+	{
+		PushIndent("        ");
+		int columnIndex = 0;
+		for(int i = 0; i < table.Columns.Count; i++)
+		{
+			Column column = table.Columns[i];
+			if (column.Identity == true)
+				continue;
+			if (column.DataType.SqlDataType == SqlDataType.Timestamp)
+				continue;
+
+			if (columnIndex > 0)
+				WriteLine(",");
+			Write("[{0}]", column.Name);
+			columnIndex++;
+		}
+		PopIndent();
+	}
+
+	/// <summary>
+	/// Writes list of parameter names for VALUES clause of the INSERT statement
+	/// </summary>
+	void WriteValuesClause(Table table)
+	{
+		PushIndent("        ");
+		int parameterIndex = 0;
+		for(int i = 0; i < table.Columns.Count; i++)
+		{
+			Column column = table.Columns[i];
+			if (column.Identity == true)
+				continue;
+			if (column.DataType.SqlDataType == SqlDataType.Timestamp)
+				continue;
+
+			if (parameterIndex > 0)
+				WriteLine(",");
+			Write("@{0}", column.Name);
+			parameterIndex++;
+		}
+		PopIndent();
+	}
+
+	/// <summary>
+	/// Writes code that assigns value to OUTPUT parameters of the stored procedure.
+	/// </summary>
+	void WriteOutputParameters(Table table)
+	{
+		foreach(Column column in table.Columns)
+		{
+			if (column.Identity == true)
+				WriteIdentityOutputParameter(column);
+			else if (column.DataType.SqlDataType == SqlDataType.Timestamp)
+				WriteTimestampOutputParameter(table, column);
+		}
+	}
+
+	/// <summary>
+	/// Writes code that assigns value to OUTPUT parameter of the IDENTITY column.
+	/// </summary>
+	void WriteIdentityOutputParameter(Column column)
+	{
+#>
+
+	-- Return <#= column.Name #> value of the new row
+	set @<#= column.Name #> = SCOPE_IDENTITY()
+<#+
+	}
+#>

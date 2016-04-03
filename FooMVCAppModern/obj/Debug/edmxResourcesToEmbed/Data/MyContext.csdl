@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MetadataTestModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Foo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LastUpdate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <Property Name="OtherFlag" Type="Boolean" Nullable="false" />
+    <Property Name="FKFirstNotNull" Type="Int32" Nullable="false" />
+    <Property Name="FKSecondNull" Type="Int32" />
+    <Property Name="FKThirdDefaultValue" Type="Int32" />
+    <Property Name="Labels" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityContainer Name="MetadataTestEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Foos" EntityType="Self.Foo" />
+    <FunctionImport Name="Foo_Insert">
+      <Parameter Name="LastUpdate" Mode="In" Type="DateTime" />
+      <Parameter Name="Active" Mode="In" Type="Boolean" />
+      <Parameter Name="OtherFlag" Mode="In" Type="Boolean" />
+      <Parameter Name="FKFirstNotNull" Mode="In" Type="Int32" />
+      <Parameter Name="FKSecondNull" Mode="In" Type="Int32" />
+      <Parameter Name="FKThirdDefaultValue" Mode="In" Type="Int32" />
+      <Parameter Name="Labels" Mode="In" Type="String" />
+      <Parameter Name="Id" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Foo_List" ReturnType="Collection(MetadataTestModel.Foo_List_Result)">
+      <Parameter Name="PageIndex" Mode="In" Type="Int32" />
+      <Parameter Name="PageQty" Mode="In" Type="Int32" />
+      <Parameter Name="OrderBy" Mode="In" Type="String" />
+      <Parameter Name="SortDirection" Mode="In" Type="String" />
+      <Parameter Name="TotalCount" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Foo_Delete">
+      <Parameter Name="Id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="Foo_Update">
+      <Parameter Name="Id" Mode="In" Type="Int32" />
+      <Parameter Name="LastUpdate" Mode="In" Type="DateTime" />
+      <Parameter Name="Active" Mode="In" Type="Boolean" />
+      <Parameter Name="OtherFlag" Mode="In" Type="Boolean" />
+      <Parameter Name="FKFirstNotNull" Mode="In" Type="Int32" />
+      <Parameter Name="FKSecondNull" Mode="In" Type="Int32" />
+      <Parameter Name="FKThirdDefaultValue" Mode="In" Type="Int32" />
+      <Parameter Name="Labels" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="Foo_List_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="DateTime" Name="LastUpdate" Nullable="false" Precision="23" />
+    <Property Type="Boolean" Name="Active" Nullable="false" />
+    <Property Type="Boolean" Name="OtherFlag" Nullable="false" />
+    <Property Type="Int32" Name="FKFirstNotNull" Nullable="false" />
+    <Property Type="Int32" Name="FKSecondNull" Nullable="true" />
+    <Property Type="Int32" Name="FKThirdDefaultValue" Nullable="true" />
+    <Property Type="String" Name="Labels" Nullable="true" MaxLength="300" />
+  </ComplexType>
+</Schema>
