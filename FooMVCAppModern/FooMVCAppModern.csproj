@@ -187,17 +187,26 @@
     </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\custom.css" />
     <Content Include="Content\jQuery-ui\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
     <Content Include="Content\jQuery-ui\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
     <Content Include="Content\jQuery-ui\images\ui-bg_flat_10_000000_40x100.png" />
     <Content Include="Content\jQuery-ui\images\ui-bg_glass_100_f6f6f6_1x400.png" />
     <Content Include="Content\jQuery-ui\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="Content\jQuery-ui\images\ui-bg_glass_75_d0e5f5_1x400.png" />
+    <Content Include="Content\jQuery-ui\images\ui-bg_glass_85_dfeffc_1x400.png" />
     <Content Include="Content\jQuery-ui\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="Content\jQuery-ui\images\ui-bg_gloss-wave_55_5c9ccc_500x100.png" />
     <Content Include="Content\jQuery-ui\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
     <Content Include="Content\jQuery-ui\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="Content\jQuery-ui\images\ui-bg_inset-hard_100_f5f8f9_1x100.png" />
+    <Content Include="Content\jQuery-ui\images\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
+    <Content Include="Content\jQuery-ui\images\ui-icons_217bc0_256x240.png" />
     <Content Include="Content\jQuery-ui\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="Content\jQuery-ui\images\ui-icons_469bdd_256x240.png" />
+    <Content Include="Content\jQuery-ui\images\ui-icons_6da8d5_256x240.png" />
+    <Content Include="Content\jQuery-ui\images\ui-icons_d8e7f3_256x240.png" />
     <Content Include="Content\jQuery-ui\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="Content\jQuery-ui\images\ui-icons_f9bd01_256x240.png" />
     <Content Include="Content\jQuery-ui\images\ui-icons_ffd27a_256x240.png" />
     <Content Include="Content\jQuery-ui\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jQuery-ui\jquery-ui.css" />
@@ -219,6 +228,7 @@
     <Content Include="Content\jQuery-ui\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\jQuery-validation\template.css" />
     <Content Include="Content\jQuery-validation\validationEngine.jquery.css" />
+    <Content Include="Content\jTable\custom.css" />
     <Content Include="Content\jTable\jqueryui\add.png" />
     <Content Include="Content\jTable\jqueryui\bg-thead.png" />
     <Content Include="Content\jTable\jqueryui\close.png" />
@@ -227,10 +237,12 @@
     <Content Include="Content\jTable\jqueryui\column-sortable.png" />
     <Content Include="Content\jTable\jqueryui\delete.png" />
     <Content Include="Content\jTable\jqueryui\edit.png" />
-    <Content Include="Content\jTable\jqueryui\jtable_jqueryui.css" />
-    <Content Include="Content\jTable\jqueryui\jtable_jqueryui.min.css" />
     <Content Include="Content\jTable\jqueryui\loading.gif" />
     <Content Include="Content\jQuery-ui\theme.css" />
+    <Content Include="Content\jTable\jtable_basic.css" />
+    <Content Include="Content\jTable\jtable_basic.min.css" />
+    <Content Include="Content\jTable\jqueryui\jtable_jqueryui.css" />
+    <Content Include="Content\jTable\jqueryui\jtable_jqueryui.min.css" />
     <Content Include="Data\MyContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>MyContext.edmx</DependentUpon>
@@ -255,6 +267,7 @@
       <DependentUpon>MyContext.edmx</DependentUpon>
     </Content>
     <Content Include="Content\jTable\jqueryui\jtable_jqueryui.less" />
+    <Content Include="Content\jTable\jtable_theme_base.less" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

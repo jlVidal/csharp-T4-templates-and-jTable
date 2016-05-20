@@ -12,8 +12,7 @@ BEGIN
     (
 		<# WriteValuesClause(this.Table); #> 
     )
-    
-    <# WriteOutputParameters(this.Table); #>
+	SELECT SCOPE_IDENTITY()
 end
 <#+
 	/// <summary>
@@ -53,13 +52,13 @@ end
 		}
 
 		// Write output parameter for identity column
-		if (identityColumn != null)
-		{
-			if (parameterIndex > 0)
-				WriteLine(",");
-			Write("@{0} {1} = NULL OUTPUT", identityColumn.Name, GetDataTypeDeclaration(identityColumn.DataType));
-			parameterIndex++;
-		}
+		//if (identityColumn != null)
+		//{
+		//	if (parameterIndex > 0)
+		//		WriteLine(",");
+		//	Write("@{0} {1} = NULL OUTPUT", identityColumn.Name, GetDataTypeDeclaration(identityColumn.DataType));
+		//	parameterIndex++;
+		//}
 
 		// Write output parameter for timestamp column
 		if (timestampColumn != null)
