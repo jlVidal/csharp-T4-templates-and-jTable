@@ -33,3 +33,4 @@ FooMetadataTest/CrudPot/UpdateProcedure.sql
 FooMetadataTest/jTableTemplate.js
 FooMetadataTest/obj/*
 FooMVCAppModern/obj/*
+FooMVCAppModern/bin/*
