@@ -26,3 +26,10 @@ packages/Newtonsoft.Json.6.0.8/lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft
 packages/Newtonsoft.Json.6.0.8/lib/portable-net45+wp80+win8+wpa81+aspnetcore50/Newtonsoft.Json.xml
 packages/Newtonsoft.Json.6.0.8/Newtonsoft.Json.6.0.8.nupkg
 packages/Newtonsoft.Json.6.0.8/tools/install.ps1
+FooMetadataTest/CrudPot/CommonCrud.sql
+FooMetadataTest/CrudPot/DeleteProcedure.sql
+FooMetadataTest/CrudPot/InsertProcedure.sql
+FooMetadataTest/CrudPot/UpdateProcedure.sql
+FooMetadataTest/jTableTemplate.js
+FooMetadataTest/obj/*
+FooMVCAppModern/obj/*
