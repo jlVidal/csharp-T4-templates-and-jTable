@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using FooMVCAppModern.Data;
 using FooMVCAppModern.DTO;
+using Microsoft.SqlServer.Management.Smo;
 
 namespace FooMVCAppModern.Controllers
 {
@@ -30,8 +31,11 @@ namespace FooMVCAppModern.Controllers
                     sortDirection = sortConfig[1];
                 }
             }
+            Database d;
+            
 
-            var res = new MetadataTestEntities().Foo_List(jtStartIndex, jtPageSize, orderByColumn, sortDirection, total);
+
+           var res = new MetadataTestEntities().Foo_List(jtStartIndex, jtPageSize, orderByColumn, sortDirection, total);
 
             var allCol = res.ToArray();
 
@@ -40,31 +44,7 @@ namespace FooMVCAppModern.Controllers
             return jsonResult;
         }
 
-        [HttpPost]
-        public JsonResult Create(FooDTO foo)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return Json(new { Result = "ERROR", Message = "Form is not valid! Please correct it and try again." });
-                }
-
-                var idParam = new ObjectParameter("Id", typeof(int));
-                var res = new MetadataTestEntities().Foo_Insert(foo.LastUpdate, foo.Active, foo.OtherFlag, foo.FKFirstNotNull, foo.FKSecondNull, foo.FKThridDefaultValue, foo.Labels, idParam);
-                if (idParam.Value != null || Convert.IsDBNull(idParam.Value) == false)
-                {
-                    foo.Id = (int)idParam.Value;
-                }
-                
-                return Json(new { Result = foo.Id > 0 ? "OK" : "ERROR", Record = foo });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { Result = "ERROR", Message = ex.Message });
-            }
-        }
-
+  
         [HttpPost]
         public JsonResult Update(FooDTO foo)
         {

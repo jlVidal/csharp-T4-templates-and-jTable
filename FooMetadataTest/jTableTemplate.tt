@@ -17,8 +17,8 @@
 <#@ import namespace="Newtonsoft.Json.Linq" #>
 <#@ output extension=".js" #>
 <#
-    var pathConn =
-        @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Users\joaol_000\Documents\MetadataTest.mdf; Integrated Security = True; Connect Timeout = 30";
+	var pathConn =
+        @"";
     var tableName = "Foo";
 
     string jTableId = null;
@@ -54,9 +54,10 @@
         Select(a => SimpleDbBasedMapper<ColumnSchema>.Map(a, new ColumnSchema())).
         ToArray();
 #>
-var JTableExtension = function()
-{
-	var self = this;
+function JTableExtension(element) {
+	var containerElement = element;
+    var self = this;
+    var dataDefinition;
 
 	self.getDataFields = function()
 	{
@@ -68,14 +69,13 @@ var JTableExtension = function()
 		return <#=serialization #>;
 	}
 
-	self.connect = function(element)
-	{
-		if (!(element instanceof jQuery))
-			element = $(element);
+	self.connect = function(element) {
+		if (!(containerElement instanceof jQuery))
+			containerElement = $(containerElement);
 
 		 var fieldsConfig = self.getDataFields();
 
-		 element.jtable({
+		 containerElement.jtable({
             tableId: '<#= jTableId #>',
             title: '<#= title #>',
             paging: true,
@@ -167,41 +167,70 @@ var JTableExtension = function()
 
             propertiesNode.defaultValue = "false";
         }
+
+        string partialType = string.Empty;
+		if (typeof (Int16?).IsAssignableFrom(columnSchema.DataType) ||
+            typeof (Int32?).IsAssignableFrom(columnSchema.DataType) ||
+            typeof (Int64?).IsAssignableFrom(columnSchema.DataType))
+        {
+            propertiesNode.inputClass = "custom[integer]";
+        }
+        else if (typeof (DateTime?).IsAssignableFrom(columnSchema.DataType))
+        {
+            propertiesNode.inputClass = "custom[date]";
+        } else if (typeof(float?).IsAssignableFrom(columnSchema.DataType) ||
+					typeof(double?).IsAssignableFrom(columnSchema.DataType) ||
+					typeof(decimal?).IsAssignableFrom(columnSchema.DataType))
+        {
+			propertiesNode.inputClass = "custom[number]";   
+        }
+
+        if (string.IsNullOrWhiteSpace(partialType))
+        {
+			partialType = GetFallBackPartialInputClass(columnSchema);
+        }
+
         if (columnSchema.AllowDBNull)
         {
-            if (typeof (Int16?).IsAssignableFrom(columnSchema.DataType) ||
-                typeof (Int32?).IsAssignableFrom(columnSchema.DataType) ||
-                typeof (Int64?).IsAssignableFrom(columnSchema.DataType))
+            if (!string.IsNullOrWhiteSpace(partialType))
             {
-                propertiesNode.inputClass = "validate[custom[number]]";
-            }
-            else if (typeof (DateTime?).IsAssignableFrom(columnSchema.DataType))
-            {
-                propertiesNode.inputClass = "validate[custom[date]]";
+				propertiesNode.inputClass = "validate[" + partialType + "]";    
             }
         }
         else
         {
-            if (typeof (Int16?).IsAssignableFrom(columnSchema.DataType) ||
-                typeof (Int32?).IsAssignableFrom(columnSchema.DataType) ||
-                typeof (Int64?).IsAssignableFrom(columnSchema.DataType))
+            if (string.IsNullOrWhiteSpace(partialType))
             {
-                propertiesNode.inputClass = "validate[required,custom[integer]]";
-            }
-            else if (typeof (DateTime?).IsAssignableFrom(columnSchema.DataType))
-            {
-                propertiesNode.inputClass = "validate[required,custom[date]]";
+                propertiesNode.inputClass = "validate[required]";
             }
             else
             {
-                if (typeof (bool?).IsAssignableFrom(columnSchema.DataType) == false)
-                {
-					propertiesNode.inputClass = "validate[required]";    
-                }
+                propertiesNode.inputClass = "validate[required," + partialType + "]";
             }
+            
         }
 		return propertiesNode;
     }
+
+    private string GetFallBackPartialInputClass(ColumnSchema schema)
+    {
+		if (schema.ColumnName.IndexOf("ID", StringComparison.OrdinalIgnoreCase) > -1)
+        {
+			return "custom[integer]"; 
+        }
+
+		if (schema.ColumnName.IndexOf("Amount", StringComparison.OrdinalIgnoreCase) > -1)
+        {
+			return "custom[number]"; 
+        }
+
+		if (schema.ColumnName.IndexOf("date", StringComparison.OrdinalIgnoreCase) > -1)
+        {
+			return "custom[date]"; 
+        }
+		return string.Empty;
+    }
+
 
     private object GetJTableType(Type dataType)
     {

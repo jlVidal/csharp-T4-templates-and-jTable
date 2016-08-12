@@ -16,6 +16,7 @@ END
 	{
 		PushIndent("    ");
 		int parameterIndex = 0;
+	    bool hasPrimaryKey = false;
 		foreach(Column column in table.Columns)
 		{
 			if (column.InPrimaryKey || column.DataType.SqlDataType == SqlDataType.Timestamp)
@@ -24,8 +25,20 @@ END
 					WriteLine(",");
 				Write("@{0} {1}", column.Name, GetDataTypeDeclaration(column.DataType));
 				parameterIndex++;
+			    hasPrimaryKey = true;
 			}
 		}
+
+	    if (!hasPrimaryKey)
+	    {
+			foreach(Column column in table.Columns)
+			{
+				if (parameterIndex > 0)
+					WriteLine(",");
+				Write("@{0} {1}", column.Name, GetDataTypeDeclaration(column.DataType));
+				parameterIndex++;
+			}    
+	    }
 		PopIndent();
 	}
 #>
