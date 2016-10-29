@@ -1,0 +1,85 @@
+<#@include file="..\Common.tt" #>
+CREATE PROCEDURE [<#= this.SchemaName #>].[<#= this.TableName #>_Update]
+    <# WriteParameterDeclarations(this.Table); #> 
+AS
+BEGIN
+	UPDATE [<#= this.SchemaName #>].[<#= this.TableName #>] 
+	SET
+		<# WriteSetClause(this.Table); #>	
+	WHERE
+		<# WriteWhereClause(this.Table); #>	
+    
+	<# WriteOutputParameters(this.Table); #>
+END
+<#+
+	/// <summary>
+	/// Writes stored procedure parameter declarations for all columns of the 
+	/// specified table. TIMESTAMP column parameter is generated as OUTPUT in 
+	/// the end of the parameter list.
+	/// </summary>
+	void WriteParameterDeclarations(Table table)
+	{
+		PushIndent("    ");
+		Column timestampColumn = null;
+		int parameterIndex = 0;
+		for(int i = 0; i < table.Columns.Count; i++)
+		{
+			Column column = table.Columns[i];
+			if (column.DataType.SqlDataType == SqlDataType.Timestamp)
+			{
+				timestampColumn = column;
+				continue;
+			}
+
+			// Write input parameter for a regular column
+			if (parameterIndex > 0)
+				WriteLine(",");
+			Write("@{0} {1}", column.Name, GetDataTypeDeclaration(column.DataType));
+			parameterIndex++;
+		}
+
+		// Write output parameter for timestamp column
+		if (timestampColumn != null)
+		{
+			if (parameterIndex > 0)
+				WriteLine(",");
+			Write("@{0} {1} output", timestampColumn.Name, GetDataTypeDeclaration(timestampColumn.DataType));
+			parameterIndex++;				
+		}
+
+		PopIndent();
+	}
+
+	/// <summary>
+	/// Writes set clause of the update statement.
+	/// </summary>
+	void WriteSetClause(Table table)
+	{
+		PushIndent("        ");
+		int setIndex = 0;
+		foreach(Column column in table.Columns)
+		{
+			if (column.InPrimaryKey)
+				continue;
+			if (column.DataType.SqlDataType == SqlDataType.Timestamp)
+				continue;
+			if (setIndex > 0)
+				WriteLine(",");
+			Write("[{0}] = @{0}", column.Name);
+			setIndex++;
+		}
+		PopIndent();
+	}
+
+	/// <summary>
+	/// Writes code that assigns value to OUTPUT parameters of the stored procedure.
+	/// </summary>
+	void WriteOutputParameters(Table table)
+	{
+		foreach(Column column in table.Columns)
+		{
+			if (column.DataType.SqlDataType == SqlDataType.Timestamp)
+				WriteTimestampOutputParameter(table, column);
+		}
+	}
+#>

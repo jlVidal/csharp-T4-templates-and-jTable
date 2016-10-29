@@ -1,0 +1,116 @@
+﻿<#@include file="..\Common.tt" #>
+CREATE PROCEDURE [<#= this.SchemaName #>].[<#= this.TableName #>_List]
+    @PageIndex INT = 0,
+	@PageQty INT = 20,
+	@OrderBy  VARCHAR(100) = NULL,
+	@SortDirection VARCHAR(4) = 'DESC',
+	@TotalCount INT = NULL OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	if (@OrderBy IS NULL)
+		SET @OrderBy = '<#= GetIdentityColumnOrFirst(this.Table) #>'
+
+	if (@SortDirection IS NULL OR (@SortDirection <> 'ASC' AND @SortDirection <> 'DESC'))
+		SET @SortDirection = 'DESC'
+
+	SELECT @TotalCount = COUNT(*) FROM [<#= this.SchemaName #>].[<#= this.TableName #>] WITH (NOLOCK)
+	--SELECT COUNT(*) FROM [<#= this.SchemaName #>].[<#= this.TableName #>] WITH (NOLOCK)
+
+	DECLARE @offSet INT = IIF(@PageIndex < 0, 0, @PageIndex * @PageQty)
+	
+	IF (@PageQty > 0)
+	BEGIN
+		DECLARE @sql NVARCHAR(MAX) = 
+		N'SELECT <# WriteListClause(this.Table); #> 
+		FROM [<#= this.SchemaName #>].[<#= this.TableName #>] WITH (NOLOCK)
+		ORDER BY ' + @OrderBy + ' ' + @SortDirection + '
+		OFFSET @offSet ROWS
+		FETCH NEXT @PageQty ROWS ONLY'
+
+		DECLARE @paramArg NVARCHAR(MAX) = N'@offSet INT, @PageQty INT'
+		EXEC sp_executesql @sql, @paramArg, @offSet, @PageQty
+	END
+	
+END
+<#+
+
+    string GetIdentityColumnOrFirst(Table table)
+    {
+        if (table.Columns.Count <= 0)
+            return "";
+
+        for (int i = 0; i < table.Columns.Count; i++)
+        {
+			Column column = table.Columns[i];
+            if (column.Identity)
+            {
+                return column.Name;
+			}
+        }
+
+        return table.Columns[0].Name;
+    }
+	/// <summary>
+	/// Writes stored procedure parameter declarations for all columns of the 
+	/// specified table. For IDENTITY and TIMESTAMP columns parameters are 
+	/// generated as OUTPUT in the end of parameter list.
+	/// </summary>
+	void WriteParameterDeclarations(Table table)
+	{
+		PushIndent("    ");
+
+		Column identityColumn = null;
+		Column timestampColumn = null;
+		int parameterIndex = 0;
+		for(int i = 0; i < table.Columns.Count; i++)
+		{
+			Column column = table.Columns[i];
+			if (column.Identity == true)
+			{
+				identityColumn = column;
+				continue;
+			}
+
+		    
+			if (column.DataType.SqlDataType == SqlDataType.Timestamp)
+			{
+				timestampColumn = column;
+				continue;
+			}
+
+			// Write input parameter for a regular column
+			if (parameterIndex > 0)
+				WriteLine(",");
+			
+			Write("@{0} {1} {2}", column.Name, GetDataTypeDeclaration(column.DataType), column.Nullable ? "= NULL" : "");
+			parameterIndex++;
+		}
+	    if (parameterIndex > 0)
+	    {
+	        Write(",");
+	    }
+		PopIndent();
+	}
+
+	/// <summary>
+	/// Writes list of column names for the INSERT statement
+	/// </summary>
+	void WriteListClause(Table table)
+	{
+		PushIndent("        ");
+		int columnIndex = 0;
+		for(int i = 0; i < table.Columns.Count; i++)
+		{
+			Column column = table.Columns[i];
+			if (columnIndex > 0)
+				WriteLine(",");
+			Write("[{0}]", column.Name);
+			columnIndex++;
+		}
+		PopIndent();
+	}
+
+
+#>

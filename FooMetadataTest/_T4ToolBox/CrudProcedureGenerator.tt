@@ -1,0 +1,40 @@
+<#@ assembly name="Microsoft.SqlServer.ConnectionInfo" #>
+<#@ assembly name="Microsoft.SqlServer.Smo" #>
+<#@ assembly name="Microsoft.SqlServer.Management.Sdk.Sfc" #>
+<#@ import namespace="Microsoft.SqlServer.Management.Smo" #>
+<#@ include file="DeleteProcedureTemplate.tt" #>
+<#@ include file="InsertProcedureTemplate.tt" #>
+<#@ include file="UpdateProcedureTemplate.tt" #>
+<#+
+public class CrudProcedureGenerator : Generator
+{
+	public string DatabaseName;
+
+	public DeleteProcedureTemplate DeleteTemplate = new DeleteProcedureTemplate();
+	public InsertProcedureTemplate InsertTemplate = new InsertProcedureTemplate();
+	public UpdateProcedureTemplate UpdateTemplate = new UpdateProcedureTemplate();
+
+	protected override void RunCore()
+	{
+        Server server = new Server();
+        Database database = new Database(server, this.DatabaseName);
+        database.Refresh();
+
+        this.DeleteTemplate.DatabaseName = this.DatabaseName;
+        this.InsertTemplate.DatabaseName = this.DatabaseName;
+        this.UpdateTemplate.DatabaseName = this.DatabaseName;
+
+        foreach (Table table in database.Tables)
+        {
+			this.DeleteTemplate.TableName = table.Name;
+			this.DeleteTemplate.RenderToFile(table.Name + "_Delete.sql");
+
+			this.InsertTemplate.TableName = table.Name;
+			this.InsertTemplate.RenderToFile(table.Name + "_Insert.sql");
+
+			this.UpdateTemplate.TableName = table.Name;
+			this.UpdateTemplate.RenderToFile(table.Name + "_Update.sql");
+        }
+	}
+}
+#>

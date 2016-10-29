@@ -1,0 +1,92 @@
+﻿<#@ template language="C#" debug="True" hostspecific="True" #>
+<#@ assembly name="$(SolutionDir)\AdminLogic\bin\Debug\AdminLogic.dll" #>
+<#@ import namespace="AdminLogic.Util" #>
+<#@ output extension=".cs" #>
+<#@ include file="..\CommonCode.tt" #>
+ 
+   public class <#= this.ClassName #> 
+   {
+<# 
+        // Keep count so we don't whitespace the last property/column
+        int columnCount = Table.Columns.Count;
+        int i = 0;
+ 
+        // Iterate all columns
+        foreach (Column col in Table.Columns)
+        {
+            i++;
+            string propertyType = GetNetDataType(col.DataType.Name);
+ 
+            // If we can't map it, skip it
+            if (string.IsNullOrWhiteSpace(propertyType))
+            {
+                // Skip
+                continue;
+            }
+ 
+            // Handle nullable columns by making the type nullable
+            if (col.Nullable && propertyType != "string")
+            {
+                propertyType += "?";
+            }
+#>
+        public <#= propertyType #> <#= col.Name.Capitalize() #> { get; set; }
+<#
+            // Do we insert the space?
+            if (i != columnCount)
+            {
+#>
+ 
+<#
+            }
+#>
+<#
+        }
+#>
+    }
+<#+
+    public static string GetNetDataType(string sqlDataTypeName)
+    {
+        switch (sqlDataTypeName.ToLower())
+        {
+            case "bigint":
+                return "Int64";
+            case "binary":
+            case "image":
+            case "varbinary":
+                return "byte[]";
+            case "bit":
+                return "bool";
+            case "char":
+                return "char";
+            case "datetime":
+            case "smalldatetime":
+                return "DateTime";
+            case "decimal":
+            case "money":
+            case "numeric":
+                return "decimal";
+            case "float":
+                return "double";
+            case "int":
+                return "int";
+            case "nchar":
+            case "nvarchar":
+            case "text":
+            case "varchar":
+            case "xml":
+                return "string";
+            case "real":
+                return "single";
+            case "smallint":
+                return "Int16";
+            case "tinyint":
+                return "byte";
+            case "uniqueidentifier":
+                return "Guid";
+                 
+            default:
+                return null;
+        }
+    }
+#>

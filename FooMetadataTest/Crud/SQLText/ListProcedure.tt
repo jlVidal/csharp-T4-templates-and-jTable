@@ -1,0 +1,90 @@
+﻿<#@include file="..\Common.tt" #>
+
+		SELECT COUNT(*) as TotalCount FROM [<#= this.SchemaName #>].[<#= this.TableName #>] WITH (NOLOCK)
+
+		SELECT <# WriteListClause(this.Table); #> 
+		FROM [<#= this.SchemaName #>].[<#= this.TableName #>] WITH (NOLOCK)
+		ORDER BY {orderBy} {pageSize}
+		OFFSET @offSet ROWS
+		FETCH NEXT @pageQty ROWS ONLY
+
+<#+
+
+    string GetIdentityColumnOrFirst(Table table)
+    {
+        if (table.Columns.Count <= 0)
+            return "";
+
+        for (int i = 0; i < table.Columns.Count; i++)
+        {
+			Column column = table.Columns[i];
+            if (column.Identity)
+            {
+                return column.Name;
+			}
+        }
+
+        return table.Columns[0].Name;
+    }
+	/// <summary>
+	/// Writes stored procedure parameter declarations for all columns of the 
+	/// specified table. For IDENTITY and TIMESTAMP columns parameters are 
+	/// generated as OUTPUT in the end of parameter list.
+	/// </summary>
+	void WriteParameterDeclarations(Table table)
+	{
+		PushIndent("    ");
+
+		Column identityColumn = null;
+		Column timestampColumn = null;
+		int parameterIndex = 0;
+		for(int i = 0; i < table.Columns.Count; i++)
+		{
+			Column column = table.Columns[i];
+			if (column.Identity == true)
+			{
+				identityColumn = column;
+				continue;
+			}
+
+		    
+			if (column.DataType.SqlDataType == SqlDataType.Timestamp)
+			{
+				timestampColumn = column;
+				continue;
+			}
+
+			// Write input parameter for a regular column
+			if (parameterIndex > 0)
+				WriteLine(",");
+			
+			Write("@{0} {1} {2}", column.Name, GetDataTypeDeclaration(column.DataType), column.Nullable ? "= NULL" : "");
+			parameterIndex++;
+		}
+	    if (parameterIndex > 0)
+	    {
+	        Write(",");
+	    }
+		PopIndent();
+	}
+
+	/// <summary>
+	/// Writes list of column names for the INSERT statement
+	/// </summary>
+	void WriteListClause(Table table)
+	{
+		PushIndent("        ");
+		int columnIndex = 0;
+		for(int i = 0; i < table.Columns.Count; i++)
+		{
+			Column column = table.Columns[i];
+			if (columnIndex > 0)
+				WriteLine(",");
+			Write("[{0}]", column.Name);
+			columnIndex++;
+		}
+		PopIndent();
+	}
+
+
+#>

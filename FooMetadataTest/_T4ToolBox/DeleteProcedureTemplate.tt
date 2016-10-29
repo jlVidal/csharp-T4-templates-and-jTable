@@ -1,0 +1,42 @@
+<#@ assembly name="Microsoft.SqlServer.ConnectionInfo" #>
+<#@ assembly name="Microsoft.SqlServer.Smo" #>
+<#@ import namespace="Microsoft.SqlServer.Management.Smo" #>
+<#+
+public class DeleteProcedureTemplate : Template
+{
+    public string DatabaseName;
+    public string TableName;
+
+    public override string TransformText()
+    {
+        Server server = new Server();
+        Database database = new Database(server, DatabaseName);
+        Table table = new Table(database, TableName);
+        table.Refresh();
+#>
+create procedure <#= table.Name #>_Delete
+<#+
+        PushIndent("\t");
+        foreach (Column column in table.Columns)
+        {
+            if (column.InPrimaryKey)
+                WriteLine("@" + column.Name + " " + column.DataType.Name);
+        }
+        PopIndent();
+#>
+as
+    delete from <#= table.Name #>
+    where
+<#+
+        PushIndent("\t\t");
+        foreach (Column column in table.Columns)
+        {
+            if (column.InPrimaryKey)
+                WriteLine(column.Name + " = @" + column.Name);
+        }
+        PopIndent();
+		
+		return this.GenerationEnvironment.ToString();
+    }
+}
+#>

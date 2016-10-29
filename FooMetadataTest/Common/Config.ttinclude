@@ -1,0 +1,41 @@
+﻿<#@ template language="C#" debug="True" hostspecific="True" #>
+<#+
+
+	/* CONFIG SQL */
+	string ConnectionString = @"";
+	string TableName = "lstCities";
+	string SchemaName = "dbo";
+
+	/* CONFIG CSHARP / CLASS*/
+	string PreName = "";
+    public string ClassName
+    {
+        get
+        {
+            return TableName.Replace("tbl", "").Replace("lst", "").Replace("data","");
+        }
+    }
+    string PosName = "Store";
+
+    public string DefaultColumn
+    {
+        get
+        {
+            return ClassName + "Id";
+        }   
+    }
+
+    string baseClassName = "StoreBase";
+	bool UseGenericInTheBaseClass = true;
+    bool UseOverrideModifier = true;
+
+    public string GetModifier()
+    {
+        if (UseOverrideModifier)
+        {
+            return "override";
+        }
+
+        return "";
+    }
+#>

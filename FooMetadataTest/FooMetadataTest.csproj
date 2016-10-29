@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FooMetadataTest</RootNamespace>
     <AssemblyName>FooMetadataTest</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -39,6 +39,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SqlServer.Smo, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
@@ -56,6 +61,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="X.PagedList, Version=5.3.0.21888, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\X.PagedList.5.3.0.5300\lib\portable-net45+wp8+win8\X.PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -66,113 +76,122 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Content Include="Common\Config.ttinclude" />
+    <None Include="Common\Manager.ttinclude" />
+    <Content Include="Crud\CommonCode.tt" />
+    <Compile Include="Crud\CSharp\POCO.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>POCO.tt</DependentUpon>
+    </Compile>
     <Compile Include="Schema.cs" />
     <Compile Include="SimpleMapper.cs" />
-    <None Include="T4ToolBox\CrudProcedureGenerator.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CrudProcedureGenerator.tt</DependentUpon>
-    </None>
-    <None Include="T4ToolBox\DeleteProcedureTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DeleteProcedureTemplate.tt</DependentUpon>
-    </None>
-    <None Include="T4ToolBox\InsertProcedureTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InsertProcedureTemplate.tt</DependentUpon>
-    </None>
-    <Compile Include="T4ToolBox\UpdateProcedureTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UpdateProcedureTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CrudPot\CommonCrud.sql">
+    <Content Include="Crud\Common.tt" />
+    <Content Include="Crud\CSharp\POCO.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>POCO.cs</LastGenOutput>
+    </Content>
+    <Content Include="Crud\CSharp\StoreGenerator.sql">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CommonCrud.tt</DependentUpon>
+      <DependentUpon>StoreGenerator.tt</DependentUpon>
     </Content>
-    <Content Include="CrudPot\CommonCrud.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CommonCrud.sql</LastGenOutput>
-    </Content>
-    <Content Include="CrudPot\DeleteProcedure.sql">
+    <Content Include="Crud\SPCommand\DeleteProcedure.sql">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DeleteProcedure.tt</DependentUpon>
     </Content>
-    <Content Include="CrudPot\DeleteProcedure.tt">
+    <Content Include="Crud\SPCommand\DeleteProcedure.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DeleteProcedure.sql</LastGenOutput>
     </Content>
-    <Content Include="CrudPot\InsertProcedure.sql">
+    <Content Include="Crud\SPCommand\InsertProcedure.sql">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InsertProcedure.tt</DependentUpon>
     </Content>
-    <Content Include="CrudPot\InsertProcedure.tt">
+    <Content Include="Crud\SPCommand\InsertProcedure.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>InsertProcedure.sql</LastGenOutput>
     </Content>
-    <Content Include="CrudPot\ListProcedure.sql">
+    <Content Include="Crud\SPCommand\ListProcedure.sql">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ListProcedure.tt</DependentUpon>
     </Content>
-    <Content Include="CrudPot\ListProcedure.tt">
+    <Content Include="Crud\SPCommand\ListProcedure.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ListProcedure.sql</LastGenOutput>
     </Content>
-    <Content Include="CrudPot\UpdateProcedure.sql">
+    <Content Include="Crud\SPCommand\UpdateProcedure.sql">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>UpdateProcedure.tt</DependentUpon>
     </Content>
-    <Content Include="CrudPot\UpdateProcedure.tt">
+    <Content Include="Crud\SPCommand\UpdateProcedure.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>UpdateProcedure.sql</LastGenOutput>
     </Content>
-    <Content Include="jTableTemplate.js">
+    <Content Include="Crud\SQLText\DeleteProcedure.sql">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeleteProcedure.tt</DependentUpon>
+    </Content>
+    <Content Include="Crud\SQLText\DeleteProcedure.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DeleteProcedure.sql</LastGenOutput>
+    </Content>
+    <Content Include="Crud\SQLText\InsertProcedure.sql">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InsertProcedure.tt</DependentUpon>
+    </Content>
+    <Content Include="Crud\SQLText\InsertProcedure.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>InsertProcedure.sql</LastGenOutput>
+    </Content>
+    <Content Include="Crud\SQLText\ListProcedure.sql">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ListProcedure.tt</DependentUpon>
+    </Content>
+    <Content Include="Crud\SQLText\ListProcedure.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ListProcedure.sql</LastGenOutput>
+    </Content>
+    <Content Include="Crud\SQLText\UpdateProcedure.sql">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UpdateProcedure.tt</DependentUpon>
+    </Content>
+    <Content Include="Crud\SQLText\UpdateProcedure.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>UpdateProcedure.sql</LastGenOutput>
+    </Content>
+    <Content Include="JTable\jTableTemplate.js">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>jTableTemplate.tt</DependentUpon>
     </Content>
-    <Content Include="jTableTemplate.tt">
+    <Content Include="JTable\jTableTemplate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>jTableTemplate.js</LastGenOutput>
     </Content>
-    <None Include="T4ToolBox\CrudProcedureGenerator.tt">
+    <None Include="_T4ToolBox\CrudProcedureGenerator.tt" />
+    <None Include="_T4ToolBox\DeleteProcedureTemplate.tt" />
+    <None Include="_T4ToolBox\InsertProcedureTemplate.tt" />
+    <None Include="_T4ToolBox\NorthwindProcedures.tt">
+      <LastOutputs>.\NorthwindProcedures1.txt</LastOutputs>
+    </None>
+    <Content Include="Crud\CSharp\StoreGenerator.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CrudProcedureGenerator.cs</LastGenOutput>
-    </None>
-    <None Include="T4ToolBox\DeleteProcedureTemplate.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DeleteProcedureTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="T4ToolBox\InsertProcedureTemplate.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>InsertProcedureTemplate.cs</LastGenOutput>
-    </None>
-    <None Include="T4ToolBox\NorthwindProcedures.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>NorthwindProcedures1.txt</LastGenOutput>
-    </None>
-    <Content Include="T4ToolBox\_NorthwindProcedures.txt" />
-    <None Include="T4ToolBox\NorthwindProcedures1.txt">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>NorthwindProcedures.tt</DependentUpon>
-    </None>
-    <Content Include="T4ToolBox\_sketch.txt" />
-    <None Include="T4ToolBox\UpdateProcedureTemplate.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>UpdateProcedureTemplate.cs</LastGenOutput>
-    </None>
+      <LastGenOutput>StoreGenerator.sql</LastGenOutput>
+    </Content>
+    <None Include="_T4ToolBox\UpdateProcedureTemplate.tt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -180,7 +199,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AdminLogic\AdminLogic.csproj">
+      <Project>{bd2287b8-f32f-4b02-a37a-9ec4714b6474}</Project>
+      <Name>AdminLogic</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

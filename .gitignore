@@ -262,3 +262,20 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+FooMetadataTest/Crud/CommonCrud.cs
+FooMetadataTest/Crud/CSharp/POCO.cs
+FooMetadataTest/Crud/SPCommand/DeleteProcedure.sql
+FooMetadataTest/Crud/SPCommand/InsertProcedure.sql
+FooMetadataTest/Crud/SPCommand/ListProcedure.sql
+FooMetadataTest/Crud/SPCommand/UpdateProcedure.sql
+FooMetadataTest/Crud/SQLText/DeleteProcedure.sql
+FooMetadataTest/Crud/SQLText/InsertProcedure.sql
+FooMetadataTest/Crud/SQLText/ListProcedure.sql
+FooMetadataTest/Crud/SQLText/UpdateProcedure.sql
+FooMetadataTest/Crud/CSharp/StoreGenerator.sql
+.vs/config/applicationhost.config
+.vs/FooMetadata/v14/.suo
+FooMetadataTest/obj/*
+FooMetadataTest/bin/*
+FooMVCAppModern/obj/*
+FooMVCAppModern/bin/*

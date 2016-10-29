@@ -1,0 +1,27 @@
+﻿<#@ template language="C#" debug="True" hostspecific="True" #>
+<#@ include file="Common.tt" #>
+<#@ output extension=".cs" #>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Text;
+<# #> <#+ string concatenatedClassName
+    {
+        get { return PreName + ClassName + PosName; }
+    }
+
+    string tempDeclaration
+    {
+        get
+        {
+			return String.IsNullOrEmpty(baseClassName) ? concatenatedClassName : (concatenatedClassName + " : " + baseClassName);
+        }
+    }
+
+    public string DeclarationResult
+    {
+        get
+        {
+			return UseGenericInTheBaseClass ? (tempDeclaration + "<" + ClassName + ">") : tempDeclaration;    
+        }
+    } #>

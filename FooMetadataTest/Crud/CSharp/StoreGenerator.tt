@@ -1,0 +1,82 @@
+﻿<#@ include file="..\..\Common\Manager.ttinclude" #>
+<#@ include file="..\CommonCode.tt" #>
+using System.Threading.Tasks;
+using AdminLogic;
+using AdminLogic.POCO;
+using AdminLogic.Util;
+using Dapper;
+using X.PagedList;
+<# var manager = Manager.Create(Host, GenerationEnvironment); #>
+<#
+	var engine = new Engine();
+    var insertSQL = engine.ProcessTemplate(File.ReadAllText(Host.ResolvePath("..\\SQL\\InsertProcedure.tt")), this.Host).Trim();
+    var updateSQL = engine.ProcessTemplate(File.ReadAllText(Host.ResolvePath("..\\SQL\\UpdateProcedure.tt")), this.Host).Trim();
+	var deleteSQL = engine.ProcessTemplate(File.ReadAllText(Host.ResolvePath("..\\SQL\\DeleteProcedure.tt")), this.Host).Trim();
+	var listSQL = engine.ProcessTemplate(File.ReadAllText(Host.ResolvePath("..\\SQL\\ListProcedure.tt")), this.Host).Trim();
+	this.Host.SetFileExtension(".cs");
+#>
+ public class <#= DeclarationResult #>
+    {
+        public <#= GetModifier() #> int Insert(<#= ClassName #> model)
+        {
+            const string insertSql = @"<#= insertSQL #>";
+
+            using (var con = GetOpenDbConnection())
+            {
+                var identityResult= con.ExecuteScalar<int>(insertSql, model);
+                model.<#=DefaultColumn#> = identityResult;
+                return identityResult;
+            }
+        }
+
+        public override int Update(<#= ClassName #> model)
+        {
+            const string insertSql = @"<#= updateSQL #>";
+
+            using (var con = GetOpenDbConnection())
+            {
+                var identityResult = con.ExecuteScalar<int>(insertSql, model);
+                return identityResult;
+            }
+        }
+
+        public override int Delete(<#= ClassName #> model)
+        {
+            const string deleteSql =  @"<#= deleteSQL #>";
+
+            using (var con = GetOpenDbConnection())
+            {
+                var identityResult = con.ExecuteScalar<int>(deleteSql, model);
+                return identityResult;
+            }
+        }
+
+        public override IPagedList<<#= ClassName #>> ListAll(int currentPage = 1, int pageSize = 20, string orderBy = null, ListSortDirection sortDirection = ListSortDirection.Descending)
+        {
+            if (!IsValidColumnName(orderBy))
+            {
+                if (string.IsNullOrWhiteSpace(orderBy))
+                {
+                    orderBy = nameof(<#= ClassName #>.<#=DefaultColumn#>);
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException(nameof(orderBy));
+                }
+            }
+
+            var offSet = (currentPage - 1) * pageSize;
+            string sqlList = $@"<#= listSQL #>";
+
+            using (var con = GetOpenDbConnection())
+            {
+                using (var multiple = con.QueryMultiple(sqlList, new {offSet, pageSize}))
+                {
+                    var total = multiple.ReadFirst<int>();
+                    var collectionResult = multiple.Read<<#= ClassName #>>();
+                    return new StaticPagedList<<#= ClassName #>>(collectionResult, currentPage, pageSize, total);
+                }
+            }
+        }
+
+    }
